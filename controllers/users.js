@@ -7,7 +7,7 @@ const getUsers = (req, res) => {
 };
 
 const getUserById = (req, res) => {
-  User.findById(req.params.id)
+  User.findById(req.params.userId)
     // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
@@ -16,8 +16,10 @@ const getUserById = (req, res) => {
       return res.status(200).send(user);
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: 'Произошла ошибка' });
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
     });
 };
 
