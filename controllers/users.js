@@ -11,7 +11,7 @@ const getUserById = (req, res) => {
     // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'Нет пользователя с таким id' });
+        return res.status(404).send({ message: 'Пользователь по указанному _id не найден.' });
       }
       return res.status(200).send(user);
     })
@@ -28,11 +28,46 @@ const createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
       }
-      return res.status(500).send({ message: 'Серверная ошибка' });
+      return res.status(500).send({ message: 'Произошла ошибка' });
     });
 };
+
+const updateUser = (req, res) => {
+  User.findByIdAndUpdate(req.user_id, { ...req.body }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователь по указанному _id не найден.' });
+      }
+      return res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
+};
+
+const updateAvatar = (req, res) => {
+  User.findByIdAndUpdate(req.user_id, { ...req.body }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователь по указанному _id не найден.' });
+      }
+      return res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserById,
+  updateUser,
+  updateAvatar,
 };
