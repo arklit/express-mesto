@@ -7,6 +7,7 @@ const routerUser = require('./routes/users');
 const routerCards = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const NotFoundError = require('./errors/not-found-err');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -47,8 +48,8 @@ app.use(auth);
 app.use('/', routerUser);
 app.use('/', routerCards);
 
-app.use((req, res) => {
-  res.status(404).send({ message: 'Ресурс не найден' });
+app.use('*', () => {
+  throw new NotFoundError('Ресурс не найден');
 });
 
 app.use(errors());

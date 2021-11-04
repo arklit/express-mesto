@@ -13,7 +13,7 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(value) {
-        return validator.isUrl(value);
+        return validator.isURL(value);
       },
       message: 'Здесь должна быть ссылка',
     },
